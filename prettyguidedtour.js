@@ -5,8 +5,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 // User defined parameters
-
+/*
+var showOnboarding = true;
 var onboardingMaskColor = "rgba(193, 128, 210, .35)";
+var onboardingFillColor = "rgba(193, 128, 210)";
+var onboardingWelcomeTextColor = "#2f394e";
 var onboardingFontFamily = "Proxima Nova";
 var onboardingPopupWidth = 400;
 var onboardingPopupGap = 24;
@@ -33,6 +36,7 @@ var onboardingHighlights = [
   }
 ];
 
+*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /////// Library 
@@ -40,18 +44,31 @@ var onboardingHighlights = [
 
 // variables
 var currentOnboardingStep = 0;
-var showOnboarding = true;
+var onboardingHighlightsAreReady = false;
 var viewportWidth = document.documentElement.clientWidth;
 var viewportHeight = document.documentElement.clientHeight;
 
 
 // once the page is rendered, start the onboarding
 window.addEventListener('load', (event) => {
-  if(showOnboarding) {
-	setupOnboarding(); 
-	addOnboardingStyles();
-  }
+	checkForHighlights();
 });
+
+function checkForHighlights() {
+	try {
+		let checkedHighlights = onboardingHighlights;
+		if (checkedHighlights != "" && checkedHighlights != null && checkedHighlights.length > 0) {
+			onboardingHighlightsAreReady = true;
+			
+			if(showOnboarding) {
+				addOnboardingStyles();
+				setupOnboarding(); 
+			}
+		}
+	} catch (error) {
+		checkForHighlights();
+	}
+}
 
 window.addEventListener('resize', onboardingOnResize);
 
@@ -66,7 +83,7 @@ function onboardingOnResize() {
 function addOnboardingStyles() {
   let onboardingStyles = document.createElement("style");
   onboardingStyles.id = "onboardingStyles";
-  onboardingStyles.innerHTML = "#onboardingMask{opacity:0;transition:all 1s ease-in-out;position:absolute;outline-width:200vw;outline-style:solid;outline-color:"+onboardingMaskColor+";overflow:hidden;pointer-events:none;animation-delay:1s;animation-duration:1s;animation-fill-mode:forwards;animation-timing-function:ease-in-out;animation-name:fadeIn}#onboardingMask #onboardingRoundedBorder{transition:all 1s ease-in-out;box-sizing:content-box;border-style:solid;border-color:"+onboardingMaskColor+"}#onboardingContainer{position:absolute;opacity:0;box-sizing:border-box;width:754px;height:425px;background:#fff;border:1px solid "+onboardingMaskColor+";left:45vw;top:40vh;animation-delay:2.3s;animation-duration:.6s;animation-fill-mode:forwards;animation-timing-function:ease-in-out;animation-name:fadeIn}#onboardingTitle{font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-weight:400;font-size:20px;color:#c180d2;letter-spacing:0;padding:40px 40px 0;box-sizing:border-box}#onboardingDescription{font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:#2f394e;letter-spacing:0;padding:0 40px;box-sizing:border-box}#onboardingButtonNext{position:absolute;bottom:0;height:64px;width:100%;background:#fff;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:#a874b6;letter-spacing:0;border:0;border-top:1px solid #c180d2;text-align:right;padding-right:40px;cursor:pointer}#onboardingButtonClose{position:absolute;top:16px;right:24px;background:0;border:0;width:16px;height:16px;color:#ccc;font-size:18px;cursor:pointer}#onboardingStepPopup{opacity:0;transition:all 1s ease-in-out;box-sizing:border-box;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;padding:0;position:absolute;width:"+onboardingPopupWidth+"px;z-index:1000;color:white;background:#a46db3;box-shadow:0 1px 20px 0 rgba(0,0,0,0.20);border-radius:4px;top:45vh;left:45vw}#onboardingStepPopup.zeroState{animation-delay:.3s;animation-duration:.6s;animation-fill-mode:forwards;animation-timing-function:ease-in-out;animation-name:fadeIn}#onboardingStepPopup.start{display:block;animation-duration:.2s;animation-name:fadeIn}#onboardingStepPopupTitle{transition:all 1s ease-in-out;box-sizing:border-box;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.20);font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-weight:600;font-size:20px;color:#fff;letter-spacing:0}#onboardingStepPopupDescription{transition:all 1s ease-in-out;box-sizing:border-box;padding:0 16px 16px;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:0}#onboardingStepPopupPrev{float:right;min-width:80px;box-sizing:border-box;padding:4px 12px;border:1px solid rgba(255,255,255,0.20);border-radius:16px;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:0;text-align:center;background:0;margin:0 0 16px 8px;cursor:pointer}#onboardingStepPopupNext{float:right;min-width:80px;box-sizing:border-box;padding:4px 12px;background:#fff;border-radius:16px;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:#2f394e;letter-spacing:0;text-align:center;border:0;margin:0 16px 16px 8px;cursor:pointer}#onboardingStepPopupClose{position:absolute;top:16px;right:16px;background:0;border:0;width:16px;height:16px;color:white;font-size:12px;cursor:pointer}#onboardingStepPopupSteps{position:absolute;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-weight:300;font-size:14px;color:#fff;letter-spacing:0;left:16px;bottom:8px}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}"
+  onboardingStyles.innerHTML = "#onboardingMask{opacity:0;transition:all 1s ease-in-out;position:absolute;outline-width:200vw;outline-style:solid;outline-color:"+onboardingMaskColor+";overflow:hidden;pointer-events:none;animation-delay:1s;animation-duration:1s;animation-fill-mode:forwards;animation-timing-function:ease-in-out;animation-name:fadeIn}#onboardingMask #onboardingRoundedBorder{transition:all 1s ease-in-out;box-sizing:content-box;border-style:solid;border-color:"+onboardingMaskColor+"}#onboardingContainer{position:absolute;opacity:0;box-sizing:border-box;width:754px;height:425px;background:#fff;border:1px solid "+onboardingMaskColor+";left:45vw;top:40vh;animation-delay:2.3s;animation-duration:.6s;animation-fill-mode:forwards;animation-timing-function:ease-in-out;animation-name:fadeIn}#onboardingTitle{font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-weight:400;font-size:20px;color:"+onboardingFillColor+";letter-spacing:0;padding:40px 40px 0;box-sizing:border-box}#onboardingDescription{font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:"+onboardingWelcomeTextColor+";letter-spacing:0;padding:0 40px;box-sizing:border-box}#onboardingButtonNext{position:absolute;bottom:0;height:64px;width:100%;background:#fff;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:#a874b6;letter-spacing:0;border:0;border-top:1px solid "+onboardingFillColor+";text-align:right;padding-right:40px;cursor:pointer}#onboardingButtonClose{position:absolute;top:16px;right:24px;background:0;border:0;width:16px;height:16px;color:#ccc;font-size:18px;cursor:pointer}#onboardingStepPopup{opacity:0;transition:all 1s ease-in-out;box-sizing:border-box;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;padding:0;position:absolute;width:"+onboardingPopupWidth+"px;z-index:1000;color:white;background:#a46db3;box-shadow:0 1px 20px 0 rgba(0,0,0,0.20);border-radius:4px;top:45vh;left:45vw}#onboardingStepPopup.zeroState{animation-delay:.3s;animation-duration:.6s;animation-fill-mode:forwards;animation-timing-function:ease-in-out;animation-name:fadeIn}#onboardingStepPopup.start{display:block;animation-duration:.2s;animation-name:fadeIn}#onboardingStepPopupTitle{transition:all 1s ease-in-out;box-sizing:border-box;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.20);font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-weight:600;font-size:20px;color:#fff;letter-spacing:0}#onboardingStepPopupDescription{transition:all 1s ease-in-out;box-sizing:border-box;padding:0 16px 16px;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:0}#onboardingStepPopupPrev{float:right;min-width:80px;box-sizing:border-box;padding:4px 12px;border:1px solid rgba(255,255,255,0.20);border-radius:16px;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:0;text-align:center;background:0;margin:0 0 16px 8px;cursor:pointer}#onboardingStepPopupNext{float:right;min-width:80px;box-sizing:border-box;padding:4px 12px;background:#fff;border-radius:16px;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-size:14px;color:"+onboardingWelcomeTextColor+";letter-spacing:0;text-align:center;border:0;margin:0 16px 16px 8px;cursor:pointer}#onboardingStepPopupClose{position:absolute;top:16px;right:16px;background:0;border:0;width:16px;height:16px;color:white;font-size:12px;cursor:pointer}#onboardingStepPopupSteps{position:absolute;font-family:"+onboardingFontFamily+",'Helvetica Neue',sans-serif;font-weight:300;font-size:14px;color:#fff;letter-spacing:0;left:16px;bottom:8px}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}"
   document.body.appendChild(onboardingStyles); 
   
 }
@@ -203,6 +220,7 @@ function startOnboardingTour() {
 
 
 function getHighlights() {
+	// @todo: check whether highlights exist
   for (var highlight in onboardingHighlights) {
 	let obj = document.getElementById(onboardingHighlights[highlight].id);
 	
@@ -335,7 +353,13 @@ function closeOnboarding() {
   ✔ get previous button to work
   ✔ last step > next button should read "done" and click should end onboarding tour
   ✔ bring CSS into JS
-  add images in welcome screen
+  
+  - add images in welcome screen
+  - add scrollTo if element is outside the viewport
+  - allow for classnames as well as IDs
+  
+  
+  // nice to have 
   
   switch variables to setVar functions to be called when needed and updated onResize
   add color conversion function: https://gist.github.com/oriadam/396a4beaaad465ca921618f2f2444d49
