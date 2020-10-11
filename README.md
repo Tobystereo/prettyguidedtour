@@ -5,8 +5,12 @@ Simply add PrettyGuidedTour to your website, definde parameters such as color an
 
 ![Pretty Guided Tour Exmaple](https://github.com/Tobystereo/prettyguidedtour/raw/main/PrettyGuidedTour_GIF.gif)
 
+## Usage Parameters
+
+add 'prettyguidedtour.js' to your webpage as well as a parameter definition:
 ```
-// User defined parameters
+<script type="text/javascript">
+// User defined parameters for Pretty Guided Tour
 
 var onboardingMaskColor = "rgba(193, 128, 210, .35)";
 var onboardingFontFamily = "Proxima Nova";
@@ -34,4 +38,11 @@ var onboardingHighlights = [
 	description: "Any user can comment on a Workspace or reply to existing comments<br><br>Users subscribed to the Workspace will receive a notification for new comments and replies."
   }
 ];
+</script>
+<script src="https://www.oratio.co/wp-content/plugins/prettyguidedtour.js"></script>
 ```
+
+## Get involved
+To contribute, check out the project, and see what needs to be done in the [dev project](https://github.com/Tobystereo/prettyguidedtour/projects/1).
+
+For questions, reach out to [me](mailto:hello@treppmann.design)
