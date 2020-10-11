@@ -14,7 +14,7 @@ var onboardingPopupWidth = 400;
 var onboardingPopupGap = 24;
 var onboardingIntro = {
   title: "Organize your data in workspaces",
-  description: "Workspaces are Neebo's collaborative project areas. Add references to datasets and documents that you need for your project.<br><br>Document with comments, tags, and the description field so that your work is more discoverable and you can easily distinguish between related projects.",
+  description: "Workspaces are APP's collaborative project areas. Add references to datasets and documents that you need for your project.<br><br>Document with comments, tags, and the description field so that your work is more discoverable and you can easily distinguish between related projects.",
   buttonText: "Get started"
 }
 var onboardingHighlights = [
