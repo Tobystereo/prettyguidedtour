@@ -7,6 +7,7 @@
 // User defined parameters
 /*
 var showOnboarding = true;
+let onboardingTimeoutLengthInMs = 300;
 var onboardingMaskColor = "rgba(193, 128, 210, .35)";
 var onboardingFillColor = "rgba(193, 128, 210)";
 var onboardingWelcomeTextColor = "#2f394e";
@@ -55,6 +56,7 @@ window.addEventListener('load', (event) => {
 });
 
 function checkForHighlights() {
+	// check whether highlights exist
 	try {
 		let checkedHighlights = onboardingHighlights;
 		if (checkedHighlights != "" && checkedHighlights != null && checkedHighlights.length > 0) {
@@ -91,14 +93,12 @@ function setupOnboarding() {
 
   let viewportWidth = document.documentElement.clientWidth;
   let viewportHeight = document.documentElement.clientHeight;
-  // let onboardingContainer = document.getElementById("onboardingContainer");
   
   
   // should be triggered by intro panel
   getHighlights();
   createOnboardingMaskLayer();
   showOnboardingContainer();
-  // onboardingNavigateNext();
 }
 
 function showOnboardingContainer() {
@@ -137,10 +137,8 @@ function showOnboardingContainer() {
   let onboardingContainerHeight = rederedOnboardingContainer.offsetHeight;
   rederedOnboardingContainer.setAttribute("style", "top:"+ (viewportHeight/2-onboardingContainerHeight/2) + "px; left: " + (viewportWidth/2-onboardingContainerWidth/2) + "px;");
   
-  // let onboardingButtonNext = document.getElementById("onboardingButtonNext");
   onboardingButtonNext.addEventListener("click", startOnboardingTour);
   
-  // let onboardingButtonClose = document.getElementById("onboardingButtonClose");
   onboardingButtonClose.addEventListener("click", closeOnboarding);
 }
 
@@ -220,19 +218,23 @@ function startOnboardingTour() {
 
 
 function getHighlights() {
-	// @todo: check whether highlights exist
-  for (var highlight in onboardingHighlights) {
-	let obj = document.getElementById(onboardingHighlights[highlight].id);
+	console.log("timeOut set");
 	
-	let highlightParams = {
-	  'width': obj.offsetWidth,
-	  'height': obj.offsetHeight,
-	  'top': obj.offsetTop,
-	  'left': obj.offsetLeft
-	};
-	
-	onboardingHighlights[highlight].params = highlightParams;
-  }
+	var onboardingAsyncPaintDelay = setTimeout(function() { 
+		for (var highlight in onboardingHighlights) {
+			let obj = document.getElementById(onboardingHighlights[highlight].id);
+			
+			let highlightParams = {
+			  'width': obj.offsetWidth,
+			  'height': obj.offsetHeight,
+			  'top': obj.offsetTop,
+			  'left': obj.offsetLeft
+			};
+			
+			onboardingHighlights[highlight].params = highlightParams;
+		}
+		console.log(onboardingHighlights);	
+	}, onboardingTimeoutLengthInMs);	
 }
 
 function createOnboardingMaskLayer() {
@@ -256,9 +258,11 @@ function onboardingNavigatePrev(){
 }
 
 function onboardingNavigateNext() {
+	// at the end of the tour, clickin the button should close the tour.	
   if(currentOnboardingStep == onboardingHighlights.length) {
 	closeOnboarding();
   } else {
+  	// if we're not at the end of the tour, move the mask and the popup to the next location
 	let movingMask = document.getElementById("onboardingMask");
 	let movingMaskRoundedBorder = document.getElementById("onboardingRoundedBorder");
 
