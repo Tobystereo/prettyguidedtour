@@ -1,6 +1,10 @@
 # prettyguidedtour
 a simple, but beautiful guided tour
 
+Simply add PrettyGuidedTour to your website, definde parameters such as color and font, and provide the IDs of the elements you want to showcase as well as a description text.
+
+![Pretty Guided Tour Exmaple](https://github.com/Tobystereo/prettyguidedtour/raw/main/PrettyGuidedTour_GIF.gif)
+
 ```
 // User defined parameters
 
